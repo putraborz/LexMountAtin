@@ -1,56 +1,36 @@
 -- Loader Key UI
 
 local Players = game:GetService("Players")
-local HttpService = game:GetService("HttpService")
+local TweenService = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 
-
-local encodedFolder = "bG9hZGVyL2VsZGwv" 
-local eldlFolder = HttpService:Base64Decode(encodedFolder)
+local saveFile = "WataX_Key.txt"
 
 
-local function isEldlValid(eldlFile)
-    local success, content = pcall(function()
-        return readfile(eldlFolder..eldlFile)
-    end)
-    if not success then return false end
-
-    local decoded = HttpService:Base64Decode(content)
-    local code, expiry = decoded:match("([^|]+)|([^|]+)")
-    expiry = tonumber(expiry)
-
-    if not code or not expiry then return false end
-    if os.time() > expiry then
-        pcall(function() delfile(eldlFolder..eldlFile) end)
-        return false
-    end
-    return true
+local function saveKey(k)
+    writefile(saveFile, k)
 end
 
 
-local function loadNextScript()
-    local url = "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/Loader/mainmap72.lua"
-    local scriptText = game:HttpGet(url)
-    loadstring(scriptText)()
-end
-
-
-local savedFile = "WataX_Key.txt"
-if isfile(savedFile) then
-    local savedKey = readfile(savedFile)
-    if isEldlValid(savedKey) then
-        warn("Auto-login pakai key tersimpan:", savedKey)
-        loadNextScript()
-        return
+local function loadKey()
+    if isfile(saveFile) then
+        return readfile(saveFile)
     else
-        delfile(savedFile) 
+        return nil
     end
 end
 
--- =====================
--- UI
--- =====================
+
+local function isKeyValid(k)
+    local url = "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/Loader/eldl/"..k
+    local success, data = pcall(function()
+        return game:HttpGet(url)
+    end)
+    return success and data ~= nil and data ~= ""
+end
+
+
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "WataXLoader"
 gui.ResetOnSpawn = false
@@ -67,8 +47,8 @@ corner.CornerRadius = UDim.new(0, 15)
 
 local gradient = Instance.new("UIGradient", mainFrame)
 gradient.Color = ColorSequence.new{
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(70, 130, 180)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(123, 104, 238))
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(70, 130, 180)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(123, 104, 238))
 }
 gradient.Rotation = 45
 
@@ -101,7 +81,7 @@ closeBtn.TextColor3 = Color3.fromRGB(255,255,255)
 local closeCorner = Instance.new("UICorner", closeBtn)
 closeCorner.CornerRadius = UDim.new(0, 6)
 closeBtn.MouseButton1Click:Connect(function()
-	gui:Destroy()
+    gui:Destroy()
 end)
 
 
@@ -134,51 +114,46 @@ iconStroke.Thickness = 1.5
 iconStroke.Color = Color3.fromRGB(255, 255, 255)
 
 
-local dragging, dragInput, dragStart, startPos
-
+local dragging = false
+local dragInput, dragStart, startPos
 local function update(input)
-	local delta = input.Position - dragStart
-	iconBtn.Position = UDim2.new(
-		startPos.X.Scale, startPos.X.Offset + delta.X,
-		startPos.Y.Scale, startPos.Y.Offset + delta.Y
-	)
+    local delta = input.Position - dragStart
+    iconBtn.Position = UDim2.new(
+        startPos.X.Scale, startPos.X.Offset + delta.X,
+        startPos.Y.Scale, startPos.Y.Offset + delta.Y
+    )
 end
-
 iconBtn.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		dragStart = input.Position
-		startPos = iconBtn.Position
-
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = iconBtn.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
 end)
-
 iconBtn.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-		dragInput = input
-	end
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
 end)
-
 UIS.InputChanged:Connect(function(input)
-	if input == dragInput and dragging then
-		update(input)
-	end
+    if input == dragInput and dragging then
+        update(input)
+    end
 end)
 
 
 minBtn.MouseButton1Click:Connect(function()
-	mainFrame.Visible = false
-	iconBtn.Visible = true
+    mainFrame.Visible = false
+    iconBtn.Visible = true
 end)
-
 iconBtn.MouseButton1Click:Connect(function()
-	iconBtn.Visible = false
-	mainFrame.Visible = true
+    iconBtn.Visible = false
+    mainFrame.Visible = true
 end)
 
 
@@ -206,18 +181,6 @@ submitBtn.TextColor3 = Color3.fromRGB(255,255,255)
 local submitCorner = Instance.new("UICorner", submitBtn)
 submitCorner.CornerRadius = UDim.new(0, 10)
 
-submitBtn.MouseButton1Click:Connect(function()
-    local inputKey = keyBox.Text
-    if isEldlValid(inputKey) then
-        writefile(savedFile, inputKey) -- simpan key biar auto login
-        gui:Destroy()
-        loadNextScript()
-    else
-        keyBox.Text = ""
-        keyBox.PlaceholderText = "Invalid / Expired!"
-    end
-end)
-
 
 local buyKeyLabel = Instance.new("TextLabel", mainFrame)
 buyKeyLabel.Size = UDim2.new(1, 0, 0, 30)
@@ -227,6 +190,9 @@ buyKeyLabel.TextSize = 16
 buyKeyLabel.Font = Enum.Font.GothamBold
 buyKeyLabel.TextColor3 = Color3.fromRGB(255,255,255)
 buyKeyLabel.BackgroundTransparency = 1
+local buyStroke = Instance.new("UIStroke", buyKeyLabel)
+buyStroke.Thickness = 1
+buyStroke.Color = Color3.fromRGB(0,0,0)
 
 
 local discordBtn = Instance.new("TextButton", mainFrame)
@@ -240,5 +206,30 @@ discordBtn.TextColor3 = Color3.fromRGB(255,255,255)
 local discCorner = Instance.new("UICorner", discordBtn)
 discCorner.CornerRadius = UDim.new(0, 8)
 discordBtn.MouseButton1Click:Connect(function()
-	setclipboard("https://discord.gg/xxxxxx")
+    setclipboard("https://discord.gg/xxxxxx")
+end)
+
+-- ==============================
+
+-- ==============================
+
+
+local lastKey = loadKey()
+if lastKey and isKeyValid(lastKey) then
+    print("Auto login berhasil, key valid:", lastKey)
+    mainFrame.Visible = false
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/loader/mainmap72.lua"))()
+end
+
+
+submitBtn.MouseButton1Click:Connect(function()
+    local inputKey = keyBox.Text
+    if isKeyValid(inputKey) then
+        saveKey(inputKey)
+        print("Key benar:", inputKey)
+        mainFrame.Visible = false
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/loader/mainmap72.lua"))()
+    else
+        print("Key salah:", inputKey)
+    end
 end)
