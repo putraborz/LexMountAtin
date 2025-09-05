@@ -1,4 +1,4 @@
--- WataX Loader Key System
+-- Loader Key UI
 
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
@@ -6,7 +6,7 @@ local UIS = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 
 
-local encodedFolder = "bG9hZGVyL2VsZGwv" -- loader/eldl/
+local encodedFolder = "bG9hZGVyL2VsZGwv" 
 local eldlFolder = HttpService:Base64Decode(encodedFolder)
 
 
@@ -39,12 +39,12 @@ end
 local savedFile = "WataX_Key.txt"
 if isfile(savedFile) then
     local savedKey = readfile(savedFile)
-    if isEldlValid(savedKey..".eldl") then
+    if isEldlValid(savedKey) then
         warn("Auto-login pakai key tersimpan:", savedKey)
         loadNextScript()
         return
     else
-        delfile(savedFile) -- hapus kalau expired
+        delfile(savedFile) 
     end
 end
 
@@ -134,8 +134,7 @@ iconStroke.Thickness = 1.5
 iconStroke.Color = Color3.fromRGB(255, 255, 255)
 
 
-local dragging = false
-local dragInput, dragStart, startPos
+local dragging, dragInput, dragStart, startPos
 
 local function update(input)
 	local delta = input.Position - dragStart
@@ -150,6 +149,7 @@ iconBtn.InputBegan:Connect(function(input)
 		dragging = true
 		dragStart = input.Position
 		startPos = iconBtn.Position
+
 		input.Changed:Connect(function()
 			if input.UserInputState == Enum.UserInputState.End then
 				dragging = false
@@ -208,9 +208,7 @@ submitCorner.CornerRadius = UDim.new(0, 10)
 
 submitBtn.MouseButton1Click:Connect(function()
     local inputKey = keyBox.Text
-    local inputFile = inputKey..".eldl"
-
-    if isEldlValid(inputFile) then
+    if isEldlValid(inputKey) then
         writefile(savedFile, inputKey) -- simpan key biar auto login
         gui:Destroy()
         loadNextScript()
