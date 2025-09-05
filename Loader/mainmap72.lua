@@ -26068,7 +26068,7 @@ frame.Draggable = true
 
 local title = Instance.new("TextLabel",frame)
 title.Size = UDim2.new(1,0,0,30)
-title.Text = "WataX Hub"
+title.Text = "WataX Menu"
 title.BackgroundColor3 = Color3.fromRGB(60,60,60)
 title.TextColor3 = Color3.fromRGB(255,255,255)
 title.Font = Enum.Font.SourceSansBold
