@@ -1,1 +1,1 @@
-https://github.com/WataXScript/WataXMountAtin/tree/main/Loader/main.lua
+https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/loader/main.lua
