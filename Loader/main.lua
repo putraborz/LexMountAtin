@@ -30,7 +30,7 @@ end
 
 
 local function loadNextScript()
-    local url = "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/loader/mainmap72.lua"
+    local url = "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/Loader/mainmap72.lua"
     local scriptText = game:HttpGet(url)
     loadstring(scriptText)()
 end
