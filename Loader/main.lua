@@ -206,7 +206,7 @@ discordBtn.TextColor3 = Color3.fromRGB(255,255,255)
 local discCorner = Instance.new("UICorner", discordBtn)
 discCorner.CornerRadius = UDim.new(0, 8)
 discordBtn.MouseButton1Click:Connect(function()
-    setclipboard("https://discord.gg/xxxxxx")
+    setclipboard("https://discord.gg/tfNqRQsqHK")
 end)
 
 -- ==============================
