@@ -85,7 +85,7 @@ local function createUI()
     AnimBtn.TextColor3 = Color3.fromRGB(255,255,255)
     AnimBtn.Font = Enum.Font.GothamBold
     AnimBtn.TextSize = 14
-    AnimBtn.Text = "ANIMASI: ON"
+    AnimBtn.Text = "BYPASS: ON"
     AnimBtn.Parent = Frame
 
     local AnimCorner = Instance.new("UICorner")
@@ -112,7 +112,7 @@ local function createUI()
     BetonBtn.TextColor3 = Color3.fromRGB(255,255,255)
     BetonBtn.Font = Enum.Font.GothamBold
     BetonBtn.TextSize = 14
-    BetonBtn.Text = "BETON: OFF"
+    BetonBtn.Text = "KEBAL: OFF"
     BetonBtn.Parent = Frame
 
     local BetonCorner = Instance.new("UICorner")
