@@ -7,7 +7,7 @@ local urlVip = "https://raw.githubusercontent.com/WataXScript/VerifikasiScWata/r
 local urlSatuan = "https://raw.githubusercontent.com/WataXScript/VerifikasiScWata/refs/heads/main/Loader/satuan.txt"
 
 local successUrls = {
-    "https://raw.githubusercontent.com/WataXScript/MountAtin/main/Loader/WataX.lua",
+    "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/Loader/WataX.lua",
     "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/Loader/mainmap792.lua"
 }
 
