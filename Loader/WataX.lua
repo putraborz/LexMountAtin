@@ -30,7 +30,7 @@ local function setup(char)
 
             
             local deltaY = hrp.Position.Y - lastPos.Y
-            if deltaY > 0.8 and not jumpCooldown then
+            if deltaY > 1.5 and not jumpCooldown then
                 humanoid.Jump = true
                 jumpCooldown = true
                 task.delay(0.4, function()
