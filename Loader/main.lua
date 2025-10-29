@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
 local player = Players.LocalPlayer
 
-local urlVip = "https://raw.githubusercontent.com/putraborz/VerifikasiScWata/blob/main/Loader/lex.txt"
+local urlVip = "https://raw.githubusercontent.com/putraborz/VerifikasiScWata/blob/main/Loader/vip.txt"
 local urlSatuan = "https://raw.githubusercontent.com/putraborz/VerifikasiScWata/blob/main/Loader/satuan.txt"
 
 local successUrls = {
