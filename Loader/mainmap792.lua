@@ -5,7 +5,7 @@ local player = Players.LocalPlayer
 local hrp
 
 local ROUTE_LINKS = {
-    "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/refs/heads/main/Loader/10.lua",
+    "https://raw.githubusercontent.com/putraborz/WataXMountAtin/refs/heads/main/Loader/10.lua",
 }
 
 local routes = {}
