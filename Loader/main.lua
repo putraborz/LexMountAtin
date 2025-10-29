@@ -8,8 +8,8 @@ local urlVip = "https://raw.githubusercontent.com/putraborz/VerifikasiScWata/ref
 local urlSatuan = "https://raw.githubusercontent.com/putraborz/VerifikasiScWata/refs/heads/main/Loader/1.txt"
 
 local successUrls = {
-    "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/Loader/WataX.lua",
-    "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/Loader/mainmap792.lua"
+    "https://raw.githubusercontent.com/putraborz/WataXMountAtin/main/Loader/WataX.lua",
+    "https://raw.githubusercontent.com/putraborz/WataXMountAtin/main/Loader/mainmap792.lua"
 }
 
 local TIKTOK_LINK = "https://www.tiktok.com/@alex"
