@@ -1,6 +1,7 @@
-
 local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
+local TweenService = game:GetService("TweenService")
+
 local player = Players.LocalPlayer
 
 local urlVip = "https://raw.githubusercontent.com/putraborz/VerifikasiScWata/refs/heads/main/Loader/vip.txt"
@@ -11,8 +12,7 @@ local successUrls = {
     "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/Loader/mainmap792.lua"
 }
 
-
-local TIKTOK_LINK = "https://www.tiktok.com/@wataxsc"
+local TIKTOK_LINK = "https://www.tiktok.com/@alex"
 local DISCORD_LINK = "https://discord.gg/tfNqRQsqHK"
 
 local function fetch(url)
@@ -42,7 +42,6 @@ local function isVerified(uname)
     return checkList(vip) or checkList(sat)
 end
 
-
 local function notify(title, text, duration)
     local ok = pcall(function()
         StarterGui:SetCore("SendNotification", {
@@ -52,12 +51,11 @@ local function notify(title, text, duration)
         })
     end)
     if not ok then
-        
         print(("[%s] %s"):format(title or "Info", text or ""))
     end
 end
 
-
+-- GUI utama
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "WataXLoader"
 gui.ResetOnSpawn = false
@@ -67,83 +65,136 @@ frame.Size = UDim2.new(0, 320, 0, 200)
 frame.Position = UDim2.new(0.5, -160, 0.5, -100)
 frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 frame.BorderSizePixel = 0
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.BackgroundTransparency = 1
+frame.Size = UDim2.new(0, 100, 0, 60)
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
-Instance.new("UIStroke", frame).Color = Color3.fromRGB(255,255,255)
+local stroke = Instance.new("UIStroke", frame)
+stroke.Thickness = 2
 
+-- ANIMASI MASUK (fade + zoom)
+TweenService:Create(frame, TweenInfo.new(0), {BackgroundTransparency = 1}):Play()
+task.wait(0.1)
+TweenService:Create(frame, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+    Size = UDim2.new(0, 320, 0, 200),
+    BackgroundTransparency = 0
+}):Play()
+
+-- RGB Border animasi
+task.spawn(function()
+    local hue = 0
+    while frame.Parent do
+        hue = (hue + 0.002) % 1
+        stroke.Color = Color3.fromHSV(hue, 1, 1)
+        task.wait(0.02)
+    end
+end)
+
+-- Label LexHost RGB
+local lexHost = Instance.new("TextLabel", frame)
+lexHost.Size = UDim2.new(0, 100, 0, 20)
+lexHost.Position = UDim2.new(1, -105, 1, -25)
+lexHost.BackgroundTransparency = 1
+lexHost.Font = Enum.Font.GothamBold
+lexHost.Text = "LexHost"
+lexHost.TextSize = 14
+lexHost.TextColor3 = Color3.fromRGB(255, 0, 0)
+lexHost.TextXAlignment = Enum.TextXAlignment.Right
+
+task.spawn(function()
+    local hue = 0
+    while lexHost.Parent do
+        hue = (hue + 0.01) % 1
+        lexHost.TextColor3 = Color3.fromHSV(hue, 1, 1)
+        task.wait(0.05)
+    end
+end)
+
+-- Tombol close
 local closeBtn = Instance.new("TextButton", frame)
 closeBtn.Size = UDim2.new(0, 30, 0, 30)
 closeBtn.Position = UDim2.new(1, -35, 0, 5)
 closeBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
 closeBtn.Text = "X"
-closeBtn.TextColor3 = Color3.fromRGB(255,255,255)
+closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeBtn.Font = Enum.Font.GothamBold
 closeBtn.TextSize = 18
 Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 8)
 closeBtn.MouseButton1Click:Connect(function()
+    TweenService:Create(frame, TweenInfo.new(0.5), {
+        Size = UDim2.new(0, 100, 0, 60),
+        BackgroundTransparency = 1
+    }):Play()
+    task.wait(0.4)
     gui:Destroy()
 end)
 
+-- Avatar
 local avatar = Instance.new("ImageLabel", frame)
 avatar.Size = UDim2.new(0, 64, 0, 64)
 avatar.Position = UDim2.new(0, 20, 0, 40)
 avatar.BackgroundTransparency = 1
 
+-- Nama player
 local unameLabel = Instance.new("TextLabel", frame)
 unameLabel.Position = UDim2.new(0, 100, 0, 55)
 unameLabel.Size = UDim2.new(1, -120, 0, 30)
 unameLabel.BackgroundTransparency = 1
 unameLabel.Font = Enum.Font.GothamBold
 unameLabel.TextSize = 20
-unameLabel.TextColor3 = Color3.fromRGB(255,255,255)
+unameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 unameLabel.TextXAlignment = Enum.TextXAlignment.Left
 unameLabel.Text = player.Name
 
+-- Status teks
 local status = Instance.new("TextLabel", frame)
 status.Position = UDim2.new(0, 20, 0, 120)
 status.Size = UDim2.new(1, -40, 0, 24)
 status.BackgroundTransparency = 1
 status.Font = Enum.Font.Gotham
 status.TextSize = 14
-status.TextColor3 = Color3.fromRGB(255,255,255)
+status.TextColor3 = Color3.fromRGB(255, 255, 255)
 status.Text = "Klik tombol verifikasi untuk lanjut..."
 
-
+-- Baris tombol
 local btnRow = Instance.new("Frame", frame)
 btnRow.Size = UDim2.new(0.86, 0, 0, 36)
 btnRow.Position = UDim2.new(0.07, 0, 1, -44)
 btnRow.BackgroundTransparency = 1
 
+-- Tombol TikTok
 local tiktokBtn = Instance.new("TextButton", btnRow)
 tiktokBtn.Size = UDim2.new(0.18, 0, 1, 0)
-tiktokBtn.Position = UDim2.new(0, 0, 0, 0)
 tiktokBtn.Text = "TikTok"
 tiktokBtn.Font = Enum.Font.GothamBold
 tiktokBtn.TextSize = 14
-tiktokBtn.TextColor3 = Color3.fromRGB(255,255,255)
-tiktokBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- pinkish
+tiktokBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+tiktokBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 Instance.new("UICorner", tiktokBtn).CornerRadius = UDim.new(0, 8)
 
+-- Tombol Verifikasi
 local verifyBtn = Instance.new("TextButton", btnRow)
 verifyBtn.Size = UDim2.new(0.56, 0, 1, 0)
 verifyBtn.Position = UDim2.new(0.22, 0, 0, 0)
 verifyBtn.Text = "Verifikasi"
 verifyBtn.Font = Enum.Font.GothamBold
 verifyBtn.TextSize = 16
-verifyBtn.TextColor3 = Color3.fromRGB(255,255,255)
+verifyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 verifyBtn.BackgroundColor3 = Color3.fromRGB(60, 180, 100)
 Instance.new("UICorner", verifyBtn).CornerRadius = UDim.new(0, 8)
 
+-- Tombol Discord
 local discordBtn = Instance.new("TextButton", btnRow)
 discordBtn.Size = UDim2.new(0.18, 0, 1, 0)
 discordBtn.Position = UDim2.new(0.82, 0, 0, 0)
-discordBtn.Text = "discord"
+discordBtn.Text = "Discord"
 discordBtn.Font = Enum.Font.GothamBold
 discordBtn.TextSize = 12
-discordBtn.TextColor3 = Color3.fromRGB(255,255,255)
-discordBtn.BackgroundColor3 = Color3.fromRGB(88, 101, 242) -- bluish
+discordBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+discordBtn.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
 Instance.new("UICorner", discordBtn).CornerRadius = UDim.new(0, 8)
 
-
+-- Fungsi salin
 local function copyToClipboard(link)
     if setclipboard then
         pcall(setclipboard, link)
@@ -156,41 +207,27 @@ local function copyToClipboard(link)
     end
 end
 
-
 tiktokBtn.MouseButton1Click:Connect(function()
     local ok = copyToClipboard(TIKTOK_LINK)
-    if ok then
-        status.Text = "✅ Link TikTok disalin!"
-    else
-        status.Text = "⚠️ Salin TikTok gagal, cek console."
-    end
-    task.delay(2, function() if status and status.Parent then status.Text = "Klik tombol verifikasi untuk lanjut..." end end)
+    status.Text = ok and "✅ Link TikTok disalin!" or "⚠️ Salin TikTok gagal!"
+    task.delay(2, function() if status.Parent then status.Text = "Klik tombol verifikasi untuk lanjut..." end end)
 end)
-
 
 discordBtn.MouseButton1Click:Connect(function()
     local ok = copyToClipboard(DISCORD_LINK)
-    if ok then
-        status.Text = "✅ Link Discord disalin!"
-    else
-        status.Text = "⚠️ Salin Discord gagal, cek console."
-    end
-    task.delay(2, function() if status and status.Parent then status.Text = "Klik tombol verifikasi untuk lanjut..." end end)
+    status.Text = ok and "✅ Link Discord disalin!" or "⚠️ Salin Discord gagal!"
+    task.delay(2, function() if status.Parent then status.Text = "Klik tombol verifikasi untuk lanjut..." end end)
 end)
 
-
+-- Avatar player
 task.spawn(function()
     local ok, img = pcall(function()
         return Players:GetUserThumbnailAsync(player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100)
     end)
-    if ok and img then
-        avatar.Image = img
-    else
-        avatar.Image = "rbxassetid://112840507"
-    end
+    avatar.Image = ok and img or "rbxassetid://112840507"
 end)
 
-
+-- Fungsi verifikasi
 local function doVerify()
     status.Text = "Memeriksa..."
     verifyBtn.Active = false
@@ -208,18 +245,13 @@ local function doVerify()
     if result then
         status.Text = "✅ KAMU TERDAFTAR SEBAGAI PENGGUNA"
         _G.WataX_Replay = true
-
-        
         task.wait(0.8)
-        for _,url in ipairs(successUrls) do
+        for _, url in ipairs(successUrls) do
             local ok2, err = pcall(function()
                 loadstring(game:HttpGet(url))()
             end)
-            if not ok2 then
-                warn("Gagal load:", url, err)
-            end
+            if not ok2 then warn("Gagal load:", url, err) end
         end
-
         task.wait(0.4)
         if gui and gui.Parent then gui:Destroy() end
     else
@@ -230,3 +262,4 @@ local function doVerify()
 end
 
 verifyBtn.MouseButton1Click:Connect(doVerify)
+
