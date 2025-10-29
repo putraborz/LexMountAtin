@@ -3,8 +3,8 @@ local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
 local player = Players.LocalPlayer
 
-local urlVip = "https://raw.githubusercontent.com/WataXScript/VerifikasiScWata/refs/heads/main/Loader/vip.txt"
-local urlSatuan = "https://raw.githubusercontent.com/WataXScript/VerifikasiScWata/refs/heads/main/Loader/1.txt"
+local urlVip = "https://raw.githubusercontent.com/putraborz/VerifikasiScWata/blob/main/Loader/vip.txt"
+local urlSatuan = "https://raw.githubusercontent.com/putraborz/VerifikasiScWata/blob/main/Loader/satuan.txt"
 
 local successUrls = {
     "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/Loader/WataX.lua",
@@ -12,8 +12,8 @@ local successUrls = {
 }
 
 
-local TIKTOK_LINK = "https://www.tiktok.com/@wataxsc"
-local DISCORD_LINK = "https://discord.gg/tfNqRQsqHK"
+local TIKTOK_LINK = "https://www.tiktok.com/@lexx"
+local DISCORD_LINK = "https://discord.gg/"
 
 local function fetch(url)
     local ok, res = pcall(function()
