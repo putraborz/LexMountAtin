@@ -5,7 +5,9 @@ local player = Players.LocalPlayer
 local isActive = true
 local isBeton = false
 local animConn
+local rgbConn
 
+-- Fungsi utama setup
 local function setup(char)
     local humanoid = char:WaitForChild("Humanoid")
     local hrp = char:WaitForChild("HumanoidRootPart")
@@ -13,14 +15,13 @@ local function setup(char)
     local jumpCooldown = false
 
     if animConn then animConn:Disconnect() end
-    animConn = RunService.RenderStepped:Connect(function(dt)
+    animConn = RunService.RenderStepped:Connect(function()
         if not hrp or not hrp.Parent then return end
 
         if isActive then
             local direction = (hrp.Position - lastPos)
             local dist = direction.Magnitude
 
-            
             if dist > 0.01 then
                 local moveVector = direction.Unit * math.clamp(dist * 5, 0, 1)
                 humanoid:Move(moveVector, false)
@@ -28,7 +29,6 @@ local function setup(char)
                 humanoid:Move(Vector3.zero, false)
             end
 
-            
             local deltaY = hrp.Position.Y - lastPos.Y
             if deltaY > 0.9 and not jumpCooldown then
                 humanoid.Jump = true
@@ -39,7 +39,6 @@ local function setup(char)
             end
         end
 
-        
         if isBeton then
             humanoid.Health = humanoid.MaxHealth
         end
@@ -52,21 +51,21 @@ player.CharacterAdded:Connect(setup)
 if player.Character then setup(player.Character) end
 
 
-
+-- 🟣 Fungsi UI
 local function createUI()
-    if player.PlayerGui:FindFirstChild("WataX_AnimUI") then
-        player.PlayerGui.WataX_AnimUI:Destroy()
+    if player.PlayerGui:FindFirstChild("LexUI_Frame") then
+        player.PlayerGui.LexUI_Frame:Destroy()
     end
 
     local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "WataX_AnimUI"
+    ScreenGui.Name = "LexUI_Frame"
     ScreenGui.ResetOnSpawn = false
     ScreenGui.Parent = player:WaitForChild("PlayerGui")
 
     local Frame = Instance.new("Frame")
     Frame.Size = UDim2.new(0, 180, 0, 100)
     Frame.Position = UDim2.new(0.05, 0, 0.05, 0)
-    Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
     Frame.BorderSizePixel = 0
     Frame.Active = true
     Frame.Draggable = true
@@ -80,11 +79,19 @@ local function createUI()
     Label.Size = UDim2.new(1, -10, 0, 25)
     Label.Position = UDim2.new(0, 5, 0, 5)
     Label.BackgroundTransparency = 1
-    Label.TextColor3 = Color3.fromRGB(200, 200, 255)
+    Label.TextColor3 = Color3.fromRGB(255, 100, 255)
     Label.Font = Enum.Font.GothamBold
     Label.TextSize = 16
-    Label.Text = "WataX"
+    Label.Text = "Lex UI"
     Label.Parent = Frame
+
+    -- 🌈 Animasi RGB untuk teks
+    if rgbConn then rgbConn:Disconnect() end
+    local hue = 0
+    rgbConn = RunService.RenderStepped:Connect(function(dt)
+        hue = (hue + dt * 0.3) % 1
+        Label.TextColor3 = Color3.fromHSV(hue, 1, 1)
+    end)
 
     local AnimBtn = Instance.new("TextButton")
     AnimBtn.Size = UDim2.new(1, -10, 0, 30)
@@ -143,9 +150,9 @@ createUI()
 
 player.CharacterAdded:Connect(function(char)
     task.wait(0.5)
-    if not player.PlayerGui:FindFirstChild("WataX_AnimUI") then
+    if not player.PlayerGui:FindFirstChild("LexUI_Frame") then
         createUI()
     end
 end)
 
-print("✅ WataX Anim + BETON + AUTO LOMPAT siap, UI persistent")
+print("✅ Lex UI | Anim + Beton + Auto Jump aktif (RGB Header)")
