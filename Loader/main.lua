@@ -13,8 +13,8 @@ local successUrls = {
     "https://raw.githubusercontent.com/WataXScript/WataXMountAtin/main/Loader/mainmap792.lua"
 }
 
-local TIKTOK_LINK = "https://www.tiktok.com/@wataxsc"
-local DISCORD_LINK = "https://discord.gg/tfNqRQsqHK"
+local TIKTOK_LINK = "https://www.tiktok.com/"
+local DISCORD_LINK = "https://discord.gg/"
 
 -- Fetch helper
 local function fetch(url)
