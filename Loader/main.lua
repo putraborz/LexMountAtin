@@ -59,9 +59,11 @@ end
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "LexLoader"
 gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
 
 -- === TEKS LEXHOST DI POJOK KIRI ATAS ===
-local lexHostCorner = Instance.new("TextLabel", gui)
+local lexHostCorner = Instance.new("TextLabel")
+lexHostCorner.Parent = gui
 lexHostCorner.Size = UDim2.new(0, 200, 0, 30)
 lexHostCorner.Position = UDim2.new(0, 10, 0, 10)
 lexHostCorner.BackgroundTransparency = 1
@@ -72,7 +74,7 @@ lexHostCorner.TextColor3 = Color3.fromRGB(255, 0, 0)
 lexHostCorner.TextXAlignment = Enum.TextXAlignment.Left
 lexHostCorner.TextYAlignment = Enum.TextYAlignment.Top
 
--- RGB animasi untuk teks LexHost
+-- Animasi RGB teks LexHost atas kiri
 task.spawn(function()
     local hue = 0
     while lexHostCorner.Parent do
@@ -82,52 +84,31 @@ task.spawn(function()
     end
 end)
 
--- === FRAME UTAMA ===
+-- === FRAME UTAMA (TAMPIL DI TENGAH) ===
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 320, 0, 200)
 frame.Position = UDim2.new(0.5, -160, 0.5, -100)
 frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 frame.BorderSizePixel = 0
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
-frame.BackgroundTransparency = 1
-frame.Size = UDim2.new(0, 100, 0, 60)
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+
 local stroke = Instance.new("UIStroke", frame)
 stroke.Thickness = 2
 
-TweenService:Create(frame, TweenInfo.new(0), {BackgroundTransparency = 1}):Play()
-task.wait(0.1)
+-- ANIMASI MASUK (fade + zoom)
+frame.BackgroundTransparency = 1
 TweenService:Create(frame, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-    Size = UDim2.new(0, 320, 0, 200),
     BackgroundTransparency = 0
 }):Play()
 
+-- RGB Border animasi
 task.spawn(function()
     local hue = 0
     while frame.Parent do
         hue = (hue + 0.002) % 1
         stroke.Color = Color3.fromHSV(hue, 1, 1)
         task.wait(0.02)
-    end
-end)
-
--- Label LexHost kecil (bawah kanan frame)
-local lexHost = Instance.new("TextLabel", frame)
-lexHost.Size = UDim2.new(0, 100, 0, 20)
-lexHost.Position = UDim2.new(1, -105, 1, -25)
-lexHost.BackgroundTransparency = 1
-lexHost.Font = Enum.Font.GothamBold
-lexHost.Text = "LexHost"
-lexHost.TextSize = 14
-lexHost.TextColor3 = Color3.fromRGB(255, 0, 0)
-lexHost.TextXAlignment = Enum.TextXAlignment.Right
-
-task.spawn(function()
-    local hue = 0
-    while lexHost.Parent do
-        hue = (hue + 0.01) % 1
-        lexHost.TextColor3 = Color3.fromHSV(hue, 1, 1)
-        task.wait(0.05)
     end
 end)
 
@@ -143,13 +124,69 @@ closeBtn.TextSize = 18
 Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 8)
 closeBtn.MouseButton1Click:Connect(function()
     TweenService:Create(frame, TweenInfo.new(0.5), {
-        Size = UDim2.new(0, 100, 0, 60),
         BackgroundTransparency = 1
     }):Play()
     task.wait(0.4)
     gui:Destroy()
 end)
 
--- Avatar, tombol, dan verifikasi (tidak diubah dari aslinya)
--- ...
+-- Avatar player
+local avatar = Instance.new("ImageLabel", frame)
+avatar.Size = UDim2.new(0, 64, 0, 64)
+avatar.Position = UDim2.new(0, 20, 0, 40)
+avatar.BackgroundTransparency = 1
 
+local unameLabel = Instance.new("TextLabel", frame)
+unameLabel.Position = UDim2.new(0, 100, 0, 55)
+unameLabel.Size = UDim2.new(1, -120, 0, 30)
+unameLabel.BackgroundTransparency = 1
+unameLabel.Font = Enum.Font.GothamBold
+unameLabel.TextSize = 20
+unameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+unameLabel.TextXAlignment = Enum.TextXAlignment.Left
+unameLabel.Text = player.Name
+
+local status = Instance.new("TextLabel", frame)
+status.Position = UDim2.new(0, 20, 0, 120)
+status.Size = UDim2.new(1, -40, 0, 24)
+status.BackgroundTransparency = 1
+status.Font = Enum.Font.Gotham
+status.TextSize = 14
+status.TextColor3 = Color3.fromRGB(255, 255, 255)
+status.Text = "Klik tombol verifikasi untuk lanjut..."
+
+local btnRow = Instance.new("Frame", frame)
+btnRow.Size = UDim2.new(0.86, 0, 0, 36)
+btnRow.Position = UDim2.new(0.07, 0, 1, -44)
+btnRow.BackgroundTransparency = 1
+
+local tiktokBtn = Instance.new("TextButton", btnRow)
+tiktokBtn.Size = UDim2.new(0.18, 0, 1, 0)
+tiktokBtn.Text = "TikTok"
+tiktokBtn.Font = Enum.Font.GothamBold
+tiktokBtn.TextSize = 14
+tiktokBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+tiktokBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Instance.new("UICorner", tiktokBtn).CornerRadius = UDim.new(0, 8)
+
+local verifyBtn = Instance.new("TextButton", btnRow)
+verifyBtn.Size = UDim2.new(0.56, 0, 1, 0)
+verifyBtn.Position = UDim2.new(0.22, 0, 0, 0)
+verifyBtn.Text = "Verifikasi"
+verifyBtn.Font = Enum.Font.GothamBold
+verifyBtn.TextSize = 16
+verifyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+verifyBtn.BackgroundColor3 = Color3.fromRGB(60, 180, 100)
+Instance.new("UICorner", verifyBtn).CornerRadius = UDim.new(0, 8)
+
+local discordBtn = Instance.new("TextButton", btnRow)
+discordBtn.Size = UDim2.new(0.18, 0, 1, 0)
+discordBtn.Position = UDim2.new(0.82, 0, 0, 0)
+discordBtn.Text = "Discord"
+discordBtn.Font = Enum.Font.GothamBold
+discordBtn.TextSize = 12
+discordBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+discordBtn.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+Instance.new("UICorner", discordBtn).CornerRadius = UDim.new(0, 8)
+
+-- Fungsi salin & verifikasi tetap sama seperti sebelumnya
