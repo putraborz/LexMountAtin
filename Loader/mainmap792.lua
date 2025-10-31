@@ -7,7 +7,7 @@ local hrp
 
 -- 🔗 Link Replay
 local ROUTE_LINKS = {
-    "https://raw.githubusercontent.com/putraborz/WataXScIni/refs/heads/main/10.lua",
+    "https://raw.githubusercontent.com/putraborz/WataXScIni/refs/heads/main/atin.lua",
 }
 
 local routes = {}
